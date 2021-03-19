@@ -1,8 +1,0 @@
----
-# configure a VM that has been created on esx
-
-- name: upgrade packages
-  apt:
-    autoremove: yes
-    state: present
-    upgrade: dist

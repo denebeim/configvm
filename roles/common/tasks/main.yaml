@@ -1,0 +1,22 @@
+---
+# configure a VM that has been created on esx
+
+- name: upgrade packages
+  apt:
+    autoremove: yes
+    state: present
+    update_cache: yes
+    upgrade: dist
+  become: yes
+
+- name: install required packages
+  apt:
+    state: present
+    package:
+      - emacs-nox
+      - freeipa-client
+      - autofs
+      - nfs-kernel-server
+      - docker.io
+  become: yes
+
