@@ -26,3 +26,9 @@
     regexp: 'automount:'
     line: "automount:\tfiles sss"
   become: yes
+
+- name: set hostname
+  ansible.builtin.hostname:
+    name: "{{ ansible_hostname }}.deepthot.aa"
+    use: systemd
+  become: yes
