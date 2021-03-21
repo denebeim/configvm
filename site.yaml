@@ -7,3 +7,13 @@
 
   roles:
     - common
+
+- name: install ipa clients
+  hosts: ipaclients
+  collections:
+    - freeipa.ansible_freeipa
+  become: true
+  remote_user: ansible
+
+  roles:
+    - ipaclient
