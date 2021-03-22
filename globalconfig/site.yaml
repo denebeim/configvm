@@ -9,7 +9,7 @@
     - common
 
 - name: install ipa clients
-  hosts: ipaclients
+  hosts: all
   collections:
     - freeipa.ansible_freeipa
   become: true
