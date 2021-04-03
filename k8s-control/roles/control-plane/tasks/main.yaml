@@ -1,0 +1,138 @@
+---
+# install kubernetes control plane
+
+- name: install required packages
+  apt:
+    state: present
+    package:
+      - apt-transport-https
+      - curl
+      - containerd
+      - libuser
+  become: true
+
+- name: add docker group
+  ansible.builtin.group:
+    name: docker
+    state: present
+    system: true
+    local: true
+
+- name: add users to docker group
+  ansible.builtin.user:
+    name: "{{item}}"
+    append: yes
+    groups: docker
+  loop:
+    - denebeim@deepthot.aa
+    - ansible
+
+- name: Add apt signing key for kubernetes packages
+  ansible.builtin.apt_key:
+    url: http://nexus:8082/repository/apt-kubernetes/doc/apt-key.gpg
+    state: present
+
+- name: Add deepthot kubernetes mirror
+  ansible.builtin.apt_repository:
+    repo: deb http://nexus:8082/repository/apt-kubernetes/ kubernetes-xenial main
+    state: present
+
+- name: install kubernetes
+  apt:
+    state: present
+    package:
+      - kubeadm
+      - kubelet
+      - kubectl
+
+- name: Configure permanent modules
+  ansible.builtin.blockinfile:
+    block: |
+      br_netfilter
+      overlay
+    path: /etc/modules-load.d/containerd
+    create: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+
+- name: Configure current modules
+  modprobe:
+    name: "{{item}}"
+  loop:
+    - br_netfilter
+    - overlay
+
+- name: Configure sysctl
+  ansible.posix.sysctl:
+    name: "{{item}}"
+    state: present
+    value: "1"
+    sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
+    reload: yes
+  loop:
+    - net.bridge.bridge-nf-call-ip6tables
+    - net.bridge.bridge-nf-call-iptables
+    - net.ipv4.ip_forward
+
+- name: Create containerd config directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/containerd
+
+- name: Stat Config File
+  stat:
+    path: /etc/containerd/config.toml
+  register: stat_config
+
+- name: Get default containerd config
+  shell: containerd config default
+  register: config
+  ignore_errors: true
+  when: not stat_config.stat.exists
+
+- name: Save default containerd config
+  copy:
+    content: "{{config.stdout}}"
+    dest: /etc/containerd/config.toml
+  register: copy_config
+  when: not stat_config.stat.exists
+
+- name: Edit containerd to use systemd
+  ansible.builtin.lineinfile:
+    path: /etc/containerd/config.toml
+    insertafter: 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc'
+    line: '          SystemdCgroup = true'
+  register: cgroup
+
+- name: Restart containerd
+  service:
+    name: containerd
+    state: restarted
+  when: copy_config.changed or cgroup.changed
+
+- name: Configure kubelet cgroup driver
+  ansible.builtin.blockinfile:
+    block: |
+      apiVersion: kubelet.config.k8s.io/v1beta1
+      kind: KubeletConfiguration
+      cgroupDriver: systemd
+    path: /var/lib/kubelet/config.yaml
+    create: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+
+- name: Disable swap
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: swap
+    state: absent
+  register: noswap
+
+- name: Turn off swap
+  command: swapoff -a
+  when: noswap.changed
+
+- name: add ip to dns cluster name
+  ipa_dnsrecord:
+    record_name: k8s
+    record_value: "{{ansible_default_ipv4.address}}"
+    ipa_pass: "{{ipaadmin_password}}"
+    zone_name: deepthot.aa
