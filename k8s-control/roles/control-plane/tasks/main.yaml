@@ -131,8 +131,10 @@
   when: noswap.changed
 
 - name: add ip to dns cluster name
-  ipa_dnsrecord:
-    record_name: k8s
-    record_value: "{{ansible_default_ipv4.address}}"
-    ipa_pass: "{{ipaadmin_password}}"
+  freeipa.ansible_freeipa.ipadnsrecord:
+    ipaadmin_password: "{{ipaadmin_password}}"
     zone_name: deepthot.aa
+    records:
+      - name: k8s
+        a_rec:
+          - "{{ansible_default_ipv4.address}}"

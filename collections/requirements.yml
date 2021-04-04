@@ -1,3 +1,5 @@
 ---
 collections:
   - freeipa.ansible_freeipa
+  - ansible.posix
+
