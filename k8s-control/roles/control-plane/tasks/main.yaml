@@ -63,15 +63,20 @@
 
 - name: Configure sysctl
   ansible.posix.sysctl:
-    name: "{{item}}"
+    name: "{{item.key}}"
     state: present
-    value: "1"
+    value: "{{item.value}}"
     sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
     reload: yes
   loop:
-    - net.bridge.bridge-nf-call-ip6tables
-    - net.bridge.bridge-nf-call-iptables
-    - net.ipv4.ip_forward
+    - key: net.bridge.bridge-nf-call-ip6tables
+      value: 1
+    - key: net.bridge.bridge-nf-call-iptables
+      value: 1
+    - key: net.ipv4.ip_forward
+      value: 1
+    - key: vm.swappiness
+      value: 0
 
 - name: Create containerd config directory
   ansible.builtin.file:
@@ -120,10 +125,12 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
 
 - name: Disable swap
-  ansible.builtin.lineinfile:
-    path: /etc/fstab
-    regexp: swap
-    state: absent
+  lineinfile:
+    dest: /etc/fstab
+    regexp: '(?i)^([^#][\S]+\s+(none|swap)\s+swap.*)'
+    line: '# \1'
+    backrefs: yes
+    state: present
   register: noswap
 
 - name: Turn off swap
@@ -133,6 +140,7 @@
 - name: add ip to dns cluster name
   ipa_dnsrecord:
     record_name: k8s
+    record_type: A
     record_value: "{{ansible_default_ipv4.address}}"
     ipa_pass: "{{ipaadmin_password}}"
     zone_name: deepthot.aa
