@@ -7,7 +7,6 @@
     state: present
     update_cache: yes
     upgrade: dist
-  become: true
 
 - name: install required packages
   apt:
@@ -17,17 +16,15 @@
       - freeipa-client
       - autofs
       - nfs-kernel-server
-  become: true
+      - python-apt
 
 - name: edit nsswitch to allow sss to access automount
   ansible.builtin.lineinfile:
     path: /etc/nsswitch.conf
     regexp: 'automount:'
     line: "automount:\tfiles sss"
-  become: true
 
 - name: set hostname
   ansible.builtin.hostname:
     name: "{{ ansible_hostname }}.deepthot.aa"
     use: systemd
-  become: true
