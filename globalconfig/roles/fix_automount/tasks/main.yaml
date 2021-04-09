@@ -1,0 +1,12 @@
+---
+# Fix the automount configuration if necessary
+
+- name: Deconfigure automount if not working
+  shell: ipa-client-automount -U --uninstall
+  args:
+    creates: "/nethome/denebeim/.ssh"
+  register: unautomount
+
+- name: Reconfigure automount if unconfigured
+  shell: ipa-client-automount -U
+  when: unautomount.changed

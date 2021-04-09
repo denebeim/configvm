@@ -29,4 +29,5 @@
   roles:
     - common
     - ipaclient
+    - fix_automount
     - reboot_if_needed
