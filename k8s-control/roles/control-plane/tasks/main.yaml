@@ -7,7 +7,7 @@
     package:
       - apt-transport-https
       - curl
-      - containerd
+      - docker.io
       - libuser
   become: true
 
@@ -26,6 +26,33 @@
   loop:
     - denebeim@deepthot.aa
     - ansible
+
+- file:
+    path: /etc/docker
+    state: directory
+    mode: 700
+
+- name: create docker config file
+  copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
+      }
+  register: docker_config
+
+- name: restart docker
+  systemd:
+    name: docker
+    daemon_reload: true
+    enabled: true
+    state: restarted
+  when: docker_config.changed
 
 - name: Add apt signing key for kubernetes packages
   apt_key:
@@ -83,56 +110,6 @@
       value: 1
     - key: vm.swappiness
       value: 0
-
-- name: Create containerd config directory
-  file:
-    state: directory
-    path: /etc/containerd
-
-- name: Stat Config File
-  stat:
-    path: /etc/containerd/config.toml
-  register: stat_config
-
-- name: Get default containerd config
-  shell: containerd config default
-  register: config
-  ignore_errors: true
-  when: not stat_config.stat.exists
-
-- name: Save default containerd config
-  copy:
-    content: "{{config.stdout}}"
-    dest: /etc/containerd/config.toml
-  register: copy_config
-  when: not stat_config.stat.exists
-
-- name: Edit containerd to use systemd
-  lineinfile:
-    path: /etc/containerd/config.toml
-    insertafter: 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc'
-    line: '          SystemdCgroup = true'
-  register: cgroup
-
-- name: Restart containerd
-  service:
-    name: containerd
-    state: restarted
-  when: copy_config.changed or cgroup.changed
-
-- name: Configure kubelet cgroup driver
-  copy:
-    content: |
-      ---
-      # kubeadm-config.yaml
-      kind: ClusterConfiguration
-      apiVersion: kubeadm.k8s.io/v1beta2
-      kubernetesVersion: 1.21
-      ---
-      kind: KubeletConfiguration
-      apiVersion: kubelet.config.k8s.io/v1beta1
-      cgroupDriver: systemd
-    dest: /tmp/kubeadm-config.yaml
 
 - name: Disable swap
   lineinfile:
