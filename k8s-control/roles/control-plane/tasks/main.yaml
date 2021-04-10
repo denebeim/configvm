@@ -12,14 +12,14 @@
   become: true
 
 - name: add docker group
-  ansible.builtin.group:
+  group:
     name: docker
     state: present
     system: true
     local: true
 
 - name: add users to docker group
-  ansible.builtin.user:
+  user:
     name: "{{item}}"
     append: yes
     groups: docker
@@ -28,14 +28,20 @@
     - ansible
 
 - name: Add apt signing key for kubernetes packages
-  ansible.builtin.apt_key:
-    url: http://nexus:8082/repository/apt-kubernetes/doc/apt-key.gpg
+  apt_key:
+    url: "{{item}}"
     state: present
+  loop:
+    - http://nexus:8082/repository/apt-kubernetes/doc/apt-key.gpg
+    - http://nexus:8082/repository/apt-docker/linux/ubuntu/gpg
 
-- name: Add deepthot kubernetes mirror
-  ansible.builtin.apt_repository:
-    repo: deb http://nexus:8082/repository/apt-kubernetes/ kubernetes-xenial main
+- name: Add deepthot mirrors
+  apt_repository:
+    repo: "{{item}}"
     state: present
+  loop:
+    - deb http://nexus:8082/repository/apt-kubernetes/ kubernetes-xenial main
+    - deb http://nexus:8082/repository/apt-docker/linux/ubuntu {{ansible_distribution_release}} stable
 
 - name: install kubernetes
   apt:
@@ -46,7 +52,7 @@
       - kubectl
 
 - name: Configure permanent modules
-  ansible.builtin.blockinfile:
+  blockinfile:
     block: |
       br_netfilter
       overlay
@@ -79,7 +85,7 @@
       value: 0
 
 - name: Create containerd config directory
-  ansible.builtin.file:
+  file:
     state: directory
     path: /etc/containerd
 
@@ -102,7 +108,7 @@
   when: not stat_config.stat.exists
 
 - name: Edit containerd to use systemd
-  ansible.builtin.lineinfile:
+  lineinfile:
     path: /etc/containerd/config.toml
     insertafter: 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc'
     line: '          SystemdCgroup = true'
@@ -115,14 +121,18 @@
   when: copy_config.changed or cgroup.changed
 
 - name: Configure kubelet cgroup driver
-  ansible.builtin.blockinfile:
-    block: |
-      apiVersion: kubelet.config.k8s.io/v1beta1
+  copy:
+    content: |
+      ---
+      # kubeadm-config.yaml
+      kind: ClusterConfiguration
+      apiVersion: kubeadm.k8s.io/v1beta2
+      kubernetesVersion: 1.21
+      ---
       kind: KubeletConfiguration
+      apiVersion: kubelet.config.k8s.io/v1beta1
       cgroupDriver: systemd
-    path: /var/lib/kubelet/config.yaml
-    create: yes
-    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    dest: /tmp/kubeadm-config.yaml
 
 - name: Disable swap
   lineinfile:
