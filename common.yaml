@@ -1,0 +1,18 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: global configuration
+  hosts: all
+  collections:
+    - freeipa.ansible_freeipa
+  become: true
+  remote_user: ansible
+  vars:
+    ipaclient_force_join: true
+    ipaautomount_location: default
+
+  roles:
+    - common
+    - ipaclient
+    - fix_automount
+    - reboot_if_needed

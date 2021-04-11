@@ -1,0 +1,11 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: set up control plane
+  hosts: all
+  remote_user: ansible
+  become: true
+  collections:
+    - freeipa.ansible_freeipa
+  roles:
+    - control-plane
