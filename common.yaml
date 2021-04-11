@@ -11,6 +11,10 @@
     ipaclient_force_join: true
     ipaautomount_location: default
 
+  tasks:
+    - include_vars:
+        dir: inventory/vars/all
+
   roles:
     - common
     - ipaclient
