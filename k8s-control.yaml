@@ -8,4 +8,4 @@
   collections:
     - freeipa.ansible_freeipa
   roles:
-    - control-plane
+    - kubernetes/control

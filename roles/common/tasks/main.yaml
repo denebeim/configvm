@@ -39,4 +39,13 @@
     enabled: true
     state: restarted
   when: timezone.changed
-  
+
+- name: join domain
+  include_role:
+    name: freeipa.ansible_freeipa.ipaclient
+
+- name: Fix Automount
+  include_tasks: fix_automount.yaml
+
+- name: Reboot if Needed
+  include_tasks: reboot_if_needed.yaml
