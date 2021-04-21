@@ -1,1 +1,23 @@
+test ansible_python_interpreter=/usr/bin/python3
+
+[kubernetes:children]
+etcd
+k8s_masters
+k8s_nodes
+
+[kubernetes:vars]
+docker_version="19.03.6"
+kubernetes_master_version="1.13.12"
+kubernetes_apt_repo_url="http://nexus:8082/repository/apt-kubernetes/"
+kubernetes_apt_repo_pool="kubernetes-xenial"
+kubernetes_kubelet_extra_args=""
+ansible_python_interpreter="/usr/bin/python3"
+
+[etcd]
+test
+
+[k8s_masters]
+test ansible_python_interpreter=/usr/bin/python3
+
+[k8s_nodes]
 test

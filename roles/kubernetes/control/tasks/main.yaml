@@ -1,31 +1,53 @@
 ---
 # install kubernetes control plane
 
+- name: Add apt signing key for kubernetes packages
+  apt_key:
+    url: "{{item}}"
+    state: present
+  loop:
+    #    - http://nexus:8082/repository/apt-kubernetes/doc/apt-key.gpg
+    - http://nexus:8082/repository/apt-docker/linux/ubuntu/gpg
+
+- name: Add deepthot mirrors
+  apt_repository:
+    repo: "{{item}}"
+    state: present
+  loop:
+    #    - deb http://nexus:8082/repository/apt-kubernetes/ kubernetes-xenial main
+    - deb http://nexus:8082/repository/apt-docker/linux/ubuntu {{ansible_distribution_release}} stable
+
+- name: wait for package installer
+  shell: |
+    while fuser /var/lib/dpkg/lock-frontend >/dev/null; do
+      wait 1
+    done
+
 - name: install required packages
   apt:
     state: present
     package:
       - apt-transport-https
       - curl
-      - docker.io
+      - docker-ce
       - libuser
   become: true
 
-- name: add docker group
-  group:
-    name: docker
-    state: present
-    system: true
-    local: true
-
-- name: add users to docker group
-  user:
-    name: "{{item}}"
-    append: yes
-    groups: docker
-  loop:
-    - denebeim@deepthot.aa
-    - ansible
+#- name: add docker group
+#  group:
+#    name: docker
+#    state: present
+#    system: true
+#    local: true
+#
+#- name: add users to docker group
+#  user:
+#    name: "{{item}}"
+#    append: yes
+#    groups: docker
+#  loop:
+#    - denebeim@deepthot.aa
+#    - ansible
 
 - file:
     path: /etc/docker
@@ -54,29 +76,13 @@
     state: restarted
   when: docker_config.changed
 
-- name: Add apt signing key for kubernetes packages
-  apt_key:
-    url: "{{item}}"
-    state: present
-  loop:
-    - http://nexus:8082/repository/apt-kubernetes/doc/apt-key.gpg
-    - http://nexus:8082/repository/apt-docker/linux/ubuntu/gpg
-
-- name: Add deepthot mirrors
-  apt_repository:
-    repo: "{{item}}"
-    state: present
-  loop:
-    - deb http://nexus:8082/repository/apt-kubernetes/ kubernetes-xenial main
-    - deb http://nexus:8082/repository/apt-docker/linux/ubuntu {{ansible_distribution_release}} stable
-
-- name: install kubernetes
-  apt:
-    state: present
-    package:
-      - kubeadm
-      - kubelet
-      - kubectl
+#- name: install kubernetes
+#  apt:
+#    state: present
+#    package:
+#      - kubeadm
+#      - kubelet
+#      - kubectl
 
 - name: Configure permanent modules
   blockinfile:
@@ -94,22 +100,22 @@
     - br_netfilter
     - overlay
 
-- name: Configure sysctl
-  ansible.posix.sysctl:
-    name: "{{item.key}}"
-    state: present
-    value: "{{item.value}}"
-    sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
-    reload: yes
-  loop:
-    - key: net.bridge.bridge-nf-call-ip6tables
-      value: 1
-    - key: net.bridge.bridge-nf-call-iptables
-      value: 1
-    - key: net.ipv4.ip_forward
-      value: 1
-    - key: vm.swappiness
-      value: 0
+#- name: Configure sysctl
+#  ansible.posix.sysctl:
+#    name: "{{item.key}}"
+#    state: present
+#    value: "{{item.value}}"
+#    sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
+#    reload: yes
+#  loop:
+#    - key: net.bridge.bridge-nf-call-ip6tables
+#      value: 1
+#    - key: net.bridge.bridge-nf-call-iptables
+#      value: 1
+#    - key: net.ipv4.ip_forward
+#      value: 1
+#    - key: vm.swappiness
+#      value: 0
 
 - name: Disable swap
   lineinfile:
@@ -120,9 +126,9 @@
     state: present
   register: noswap
 
-- name: Turn off swap
+- name: "Disable swap"
   command: swapoff -a
-  when: noswap.changed
+  when: ansible_swaptotal_mb > 0
 
 - name: add ip to dns cluster name
   ipa_dnsrecord:
