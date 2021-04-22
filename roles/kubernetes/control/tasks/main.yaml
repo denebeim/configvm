@@ -6,7 +6,6 @@
     url: "{{item}}"
     state: present
   loop:
-    #    - http://nexus:8082/repository/apt-kubernetes/doc/apt-key.gpg
     - http://nexus:8082/repository/apt-docker/linux/ubuntu/gpg
 
 - name: Add deepthot mirrors
@@ -14,7 +13,6 @@
     repo: "{{item}}"
     state: present
   loop:
-    #    - deb http://nexus:8082/repository/apt-kubernetes/ kubernetes-xenial main
     - deb http://nexus:8082/repository/apt-docker/linux/ubuntu {{ansible_distribution_release}} stable
 
 - name: wait for package installer
@@ -32,22 +30,6 @@
       - docker-ce
       - libuser
   become: true
-
-#- name: add docker group
-#  group:
-#    name: docker
-#    state: present
-#    system: true
-#    local: true
-#
-#- name: add users to docker group
-#  user:
-#    name: "{{item}}"
-#    append: yes
-#    groups: docker
-#  loop:
-#    - denebeim@deepthot.aa
-#    - ansible
 
 - file:
     path: /etc/docker
@@ -76,14 +58,6 @@
     state: restarted
   when: docker_config.changed
 
-#- name: install kubernetes
-#  apt:
-#    state: present
-#    package:
-#      - kubeadm
-#      - kubelet
-#      - kubectl
-
 - name: Configure permanent modules
   blockinfile:
     block: |
@@ -99,23 +73,6 @@
   loop:
     - br_netfilter
     - overlay
-
-#- name: Configure sysctl
-#  ansible.posix.sysctl:
-#    name: "{{item.key}}"
-#    state: present
-#    value: "{{item.value}}"
-#    sysctl_file: /etc/sysctl.d/99-kubernetes-cri.conf
-#    reload: yes
-#  loop:
-#    - key: net.bridge.bridge-nf-call-ip6tables
-#      value: 1
-#    - key: net.bridge.bridge-nf-call-iptables
-#      value: 1
-#    - key: net.ipv4.ip_forward
-#      value: 1
-#    - key: vm.swappiness
-#      value: 0
 
 - name: Disable swap
   lineinfile:

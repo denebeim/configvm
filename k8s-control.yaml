@@ -8,27 +8,6 @@
   collections:
     - freeipa.ansible_freeipa
   pre_tasks:
-#    - name: Configure permanent modules
-#      blockinfile:
-#        block: |
-#          br_netfilter
-#          overlay
-#        path: /etc/modules-load.d/containerd
-#        create: yes
-#        marker: "# {mark} ANSIBLE MANAGED BLOCK"
-#
-#    - name: Configure current modules
-#      modprobe:
-#        name: "{{item}}"
-#      loop:
-#        - br_netfilter
-#        - overlay
-
-#    - name: set fact ansible_host
-#      set_fact: ansible_host="{{ ansible_facts.default_ipv4.address }}"
-#    - file:
-#        path: "/etc/default/kubelet"
-#        state: touch
   roles:
     - kubernetes/control
     - geerlingguy.kubernetes
