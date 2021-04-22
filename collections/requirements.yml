@@ -2,6 +2,3 @@
 collections:
   - freeipa.ansible_freeipa
   - ansible.posix
-
-roles:
-  - geerlingguy.kubernetes
