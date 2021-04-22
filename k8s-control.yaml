@@ -2,7 +2,7 @@
 # This playbook deploys the whole application stack in this site.
 
 - name: set up control plane
-  hosts: all
+  hosts: k8s_masters
   remote_user: ansible
   become: true
   collections:
