@@ -1,4 +1,4 @@
-test ansible_python_interpreter=/usr/bin/python3
+test1
 
 [kubernetes:children]
 etcd
@@ -11,13 +11,12 @@ kubernetes_master_version="1.21.0"
 kubernetes_apt_repo_url="http://nexus:8082/repository/apt-kubernetes/"
 kubernetes_apt_repo_pool="kubernetes-xenial"
 kubernetes_kubelet_extra_args=""
-ansible_python_interpreter="/usr/bin/python3"
 
 [etcd]
 test
 
 [k8s_masters]
-test ansible_python_interpreter=/usr/bin/python3
+test
 
 [k8s_nodes]
 test
