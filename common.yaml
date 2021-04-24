@@ -13,7 +13,7 @@
 
   tasks:
     - include_vars:
-        dir: inventory/group_vars/all
+        dir: inventory/vars/all
 
   roles:
     - common
