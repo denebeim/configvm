@@ -1,13 +1,14 @@
 ---
 # This playbook deploys the whole application stack in this site.
 
-- name: set up control plane
-  hosts: k8s_masters
+- name: set up kubernetes cluster
+  hosts: kubernetes
   remote_user: ansible
   become: true
   collections:
     - freeipa.ansible_freeipa
   pre_tasks:
   roles:
-    - kubernetes/control
+    - common
+    - kubernetes
     - geerlingguy.kubernetes

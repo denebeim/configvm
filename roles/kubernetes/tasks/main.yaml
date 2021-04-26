@@ -89,7 +89,7 @@
 
 - name: add ip to dns cluster name
   ipa_dnsrecord:
-    record_name: k8s
+    record_name: deepthot-cluster
     record_type: A
     record_value: "{{ansible_default_ipv4.address}}"
     ipa_pass: "{{ipaadmin_password}}"

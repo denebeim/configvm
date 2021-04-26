@@ -1,0 +1,4 @@
+all:
+  vars:
+    ipaclient_force_join: true
+    ipaautomount_location: default

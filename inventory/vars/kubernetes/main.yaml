@@ -1,0 +1,6 @@
+---
+docker_version="19.03.13"
+kubernetes_master_version="1.21.0"
+kubernetes_apt_repo_url="http://nexus:8082/repository/apt-kubernetes/"
+kubernetes_apt_repo_pool="kubernetes-xenial"
+kubernetes_kubelet_extra_args=""

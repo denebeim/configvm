@@ -1,22 +1,13 @@
-test1
-
 [kubernetes:children]
 etcd
 k8s_masters
 k8s_nodes
 
-[kubernetes:vars]
-docker_version="19.03.13"
-kubernetes_master_version="1.21.0"
-kubernetes_apt_repo_url="http://nexus:8082/repository/apt-kubernetes/"
-kubernetes_apt_repo_pool="kubernetes-xenial"
-kubernetes_kubelet_extra_args=""
-
 [etcd]
-test
+k8s
 
 [k8s_masters]
-test
+k8s
 
 [k8s_nodes]
-test
+k8s
