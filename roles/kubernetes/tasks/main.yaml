@@ -94,3 +94,4 @@
     record_value: "{{ansible_default_ipv4.address}}"
     ipa_pass: "{{ipaadmin_password}}"
     zone_name: deepthot.aa
+  when: "'k8s_masters' in group_names"
