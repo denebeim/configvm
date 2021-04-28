@@ -11,3 +11,6 @@ k8s
 
 [k8s_nodes]
 k8s-node-1
+
+[k8s_nodes:vars]
+kubernetes_role=node
