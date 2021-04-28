@@ -9,9 +9,9 @@
   remote_user: ansible
   vars:
 
-  tasks:
-    - include_vars:
-        dir: inventory/vars/all
+#  tasks:
+#    - include_vars:
+#        dir: inventory/vars/all
 
   roles:
     - common
