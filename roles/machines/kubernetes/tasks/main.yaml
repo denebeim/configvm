@@ -88,10 +88,10 @@
   when: ansible_swaptotal_mb > 0
 
 - name: add ip to dns cluster name
-  ipa_dnsrecord:
+  community.general.ipa_dnsrecord:
     record_name: deepthot-cluster
     record_type: A
     record_value: "{{ansible_default_ipv4.address}}"
     ipa_pass: "{{ipaadmin_password}}"
-    zone_name: deepthot.aa
+    zone_name: "{{domain}}"
   when: "'k8s_masters' in group_names"

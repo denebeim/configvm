@@ -9,6 +9,6 @@
     - freeipa.ansible_freeipa
   pre_tasks:
   roles:
-    - common
-    - kubernetes
+    - machines/common
+    - machines/kubernetes
     - geerlingguy.kubernetes
