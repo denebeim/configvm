@@ -14,4 +14,4 @@
 #        dir: inventory/vars/all
 
   roles:
-    - common
+    - machines/common
