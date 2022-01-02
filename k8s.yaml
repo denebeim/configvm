@@ -7,8 +7,9 @@
   become: true
   collections:
     - freeipa.ansible_freeipa
-  pre_tasks:
+
   roles:
     - machines/common
     - machines/kubernetes
+    - geerlingguy.docker
     - geerlingguy.kubernetes

@@ -1,19 +1,19 @@
 ---
 # install kubernetes control plane
 
-- name: Add apt signing key for kubernetes packages
-  apt_key:
-    url: "{{item}}"
-    state: present
-  loop:
-    - http://nexus:8082/repository/apt-docker/linux/ubuntu/gpg
-
-- name: Add deepthot mirrors
-  apt_repository:
-    repo: "{{item}}"
-    state: present
-  loop:
-    - deb http://nexus:8082/repository/apt-docker/linux/ubuntu {{ansible_distribution_release}} stable
+#- name: Add apt signing key for kubernetes packages
+#  apt_key:
+#    url: "{{item}}"
+#    state: present
+#  loop:
+#    - http://nexus:8082/repository/apt-docker/linux/ubuntu/gpg
+#
+#- name: Add deepthot mirrors
+#  apt_repository:
+#    repo: "{{item}}"
+#    state: present
+#  loop:
+#    - deb http://nexus:8082/repository/apt-docker/linux/ubuntu {{ansible_distribution_release}} stable
 
 - name: wait for package installer
   shell: |
@@ -21,42 +21,42 @@
       wait 1
     done
 
-- name: install required packages
-  apt:
-    state: present
-    package:
-      - apt-transport-https
-      - curl
-      - docker-ce
-      - libuser
-  become: true
-
-- file:
-    path: /etc/docker
-    state: directory
-    mode: 700
-
-- name: create docker config file
-  copy:
-    dest: /etc/docker/daemon.json
-    content: |
-      {
-        "exec-opts": ["native.cgroupdriver=systemd"],
-        "log-driver": "json-file",
-        "log-opts": {
-          "max-size": "100m"
-        },
-        "storage-driver": "overlay2"
-      }
-  register: docker_config
-
-- name: restart docker
-  systemd:
-    name: docker
-    daemon_reload: true
-    enabled: true
-    state: restarted
-  when: docker_config.changed
+#- name: install required packages
+#  apt:
+#    state: present
+#    package:
+#      - apt-transport-https
+#      - curl
+#      - docker-ce
+#      - libuser
+#  become: true
+#
+#- file:
+#    path: /etc/docker
+#    state: directory
+#    mode: 700
+#
+#- name: create docker config file
+#  copy:
+#    dest: /etc/docker/daemon.json
+#    content: |
+#      {
+#        "exec-opts": ["native.cgroupdriver=systemd"],
+#        "log-driver": "json-file",
+#        "log-opts": {
+#          "max-size": "100m"
+#        },
+#        "storage-driver": "overlay2"
+#      }
+#  register: docker_config
+#
+#- name: restart docker
+#  systemd:
+#    name: docker
+#    daemon_reload: true
+#    enabled: true
+#    state: restarted
+#  when: docker_config.changed
 
 - name: Configure permanent modules
   blockinfile:
@@ -87,11 +87,11 @@
   command: swapoff -a
   when: ansible_swaptotal_mb > 0
 
-- name: add ip to dns cluster name
-  ipa_dnsrecord:
-    record_name: deepthot-cluster
-    record_type: A
-    record_value: "{{ansible_default_ipv4.address}}"
-    ipa_pass: "{{ipaadmin_password}}"
-    zone_name: "{{domain}}"
-  when: "'k8s_masters' in group_names"
+#- name: add ip to dns cluster name
+#  ipa_dnsrecord:
+#    record_name: deepthot-cluster
+#    record_type: A
+#    record_value: "{{ansible_default_ipv4.address}}"
+#    ipa_pass: "{{ipaadmin_password}}"
+#    zone_name: "{{domain}}"
+#  when: "'k8s_masters' in group_names"

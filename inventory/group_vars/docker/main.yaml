@@ -1,5 +1,6 @@
 ---
-docker_repo_url: "http://nexus:8082/repository/apt-docker/linux/ubuntu"
+docker_repo_url: "http://nexus:8082/repository/apt-docker/linux"
+#docker_package: "docker-{{ docker_edition }}=5:19.03.15~3-0~ubuntu-focal"
 docker_users: [denebeim]
 docker_daemon_options: {
   "exec-opts": ["native.cgroupdriver=systemd"],
