@@ -10,6 +10,6 @@
 
   roles:
     - machines/common
-    - machines/kubernetes
+    - machines/pre_docker
     - geerlingguy.docker
     - geerlingguy.kubernetes
