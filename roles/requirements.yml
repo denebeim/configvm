@@ -2,3 +2,4 @@
 roles:
   - geerlingguy.docker
   - geerlingguy.kubernetes
+  - nginxinc.nginx_config

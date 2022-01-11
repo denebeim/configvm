@@ -285,5 +285,3 @@ pip-selfcheck.json
 
 ### Ansible template
 *.retry
-
-!/roles/galaxy_roles/

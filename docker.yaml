@@ -1,0 +1,14 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: set up docker machine
+  hosts: docker
+  remote_user: ansible
+  become: true
+  collections:
+    - freeipa.ansible_freeipa
+
+  roles:
+    - machines/common
+    - machines/kubernetes
+    - geerlingguy.docker
