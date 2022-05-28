@@ -16,7 +16,6 @@
       - freeipa-client
       - autofs
       - nfs-kernel-server
-      - python-apt
 
 - name: edit nsswitch to allow sss to access automount
   lineinfile:
