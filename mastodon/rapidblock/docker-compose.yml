@@ -89,7 +89,7 @@ services:
       - redis-volatile
       - elasticsearch
     ports:
-      - '127.0.0.1:3000:3000'
+      - '3000:3000'
     networks:
       - internal_network
       - external_network
@@ -131,7 +131,7 @@ services:
       - redis-volatile
       - elasticsearch
     ports:
-      - '127.0.0.1:4000:4000'
+      - '4000:4000'
     networks:
       - internal_network
       - external_network
@@ -215,7 +215,7 @@ volumes:
   uploads:
     driver_opts:
       type: none
-      device: /opt/mastodon/public/system
+      device: /opt/mastodon/web/public/system
       o: bind
   rapidblock:
     driver_opts:
