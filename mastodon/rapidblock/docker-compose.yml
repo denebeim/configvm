@@ -199,28 +199,20 @@ networks:
 volumes:
   postgresql:
     driver_opts:
-      type: none
-      device: /opt/mastodon/database/postgresql
-      o: bind
+      type: volume
+    source: woollyPostgresql
+    
   redis:
-    driver_opts:
-      type: none
-      device: /opt/mastodon/database/redis
-      o: bind
   elasticsearch:
-    driver_opts:
-      type: none
-      device: /opt/mastodon/database/elasticsearch
-      o: bind
   uploads:
-    driver_opts:
-      type: none
-      device: /opt/mastodon/web/public/system
-      o: bind
   rapidblock:
     driver_opts:
+      type: volume
+      device: woolly-rapidblock
+  homedir:
+    driver_opts:
       type: none
-      device: /opt/rapidblock
+      device: .
       o: bind
 
 secrets:

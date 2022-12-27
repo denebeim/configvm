@@ -8,4 +8,3 @@ VOLUME ["/opt/rapidblock"]
 COPY rapidblock.env /etc/default/rapidblock
 
 CMD /opt/rapidblock/scripts/cron.sh
-
