@@ -198,17 +198,10 @@ networks:
 
 volumes:
   postgresql:
-    driver_opts:
-      type: volume
-    source: woollyPostgresql
-    
   redis:
   elasticsearch:
   uploads:
   rapidblock:
-    driver_opts:
-      type: volume
-      device: woolly-rapidblock
   homedir:
     driver_opts:
       type: none
