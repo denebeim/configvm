@@ -75,7 +75,7 @@ services:
       - secrets
 
   website:
-    image: tootsuite/mastodon:v4.0.2
+    image: tootsuite/mastodon:v4.1.0
     env_file:
       - application.env
       - database.env
@@ -101,7 +101,7 @@ services:
       - secrets
 
   shell:
-    image: tootsuite/mastodon:v4.0.2
+    image: tootsuite/mastodon:v4.1.0
     env_file:
       - application.env
       - database.env
@@ -117,7 +117,7 @@ services:
       - secrets
 
   streaming:
-    image: tootsuite/mastodon:v4.0.2
+    image: tootsuite/mastodon:v4.1.0
     env_file:
       - application.env
       - database.env
@@ -141,7 +141,7 @@ services:
       - secrets
 
   sidekiq:
-    image: tootsuite/mastodon:v4.0.2
+    image: tootsuite/mastodon:v4.1.0
     env_file:
       - application.env
       - database.env
