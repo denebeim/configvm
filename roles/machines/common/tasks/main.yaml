@@ -23,6 +23,12 @@
     regexp: 'automount:'
     line: "automount:\tfiles sss"
 
+- name: save all facts to host specific file
+  copy:
+    content: "{{ ansible_delegated_vars[{{ansible_hostname}}].vars | to_nice_json }}"
+    dest: "/tmp/{{ playbook_dir }}/{{ ansible_fqdn }}"
+  delegate_to: localhost
+
 - hostname:
     name: "{{ ansible_hostname }}.{{domain}}"
     use: systemd
