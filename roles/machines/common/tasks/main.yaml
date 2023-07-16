@@ -24,7 +24,7 @@
     line: "automount:\tfiles sss"
 
 - hostname:
-    name: "{{ ansible_hostname }}.{{domain}}"
+    name: "{{ ansible_hostname }}"
     use: systemd
 
 - timezone:
