@@ -2,7 +2,7 @@
 # This playbook deploys the whole application stack in this site.
 
 - name: set up kubernetes cluster
-  hosts: kubernetes
+  hosts: all
   remote_user: ansible
   become: true
   collections:
