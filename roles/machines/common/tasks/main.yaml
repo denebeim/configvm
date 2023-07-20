@@ -16,6 +16,7 @@
       - freeipa-client
       - autofs
       - nfs-kernel-server
+      - direnv
 
 - name: edit nsswitch to allow sss to access automount
   lineinfile:
