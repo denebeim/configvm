@@ -1,6 +1,13 @@
 ---
 # configure a VM that has been created on esx
 
+# we changed the port on the nexus repository
+- name: reconfigure sources.list
+  path: /etc/apt/sources.list
+  regexp: '8082'
+  replace: '8083'
+  backup: yes
+
 - name: upgrade packages
   apt:
     autoremove: yes
