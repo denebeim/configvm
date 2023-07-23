@@ -1,5 +1,5 @@
 ---
-docker_repo_url: "http://nexus:8082/repository/apt-docker/linux"
+docker_repo_url: "http://nexus:8083/repository/apt-docker/linux"
 docker_users: [denebeim]
 docker_daemon_options: {
   "exec-opts": ["native.cgroupdriver=systemd"],
