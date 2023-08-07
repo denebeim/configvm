@@ -14,5 +14,5 @@
   roles:
     - machines/common
     - machines/pre_docker
-    - geerlingguy.docker
+    - geerlingguy.containerd
     - geerlingguy.kubernetes
