@@ -6,3 +6,6 @@ kubernetes_version_kubeadm: '1.27.3'
 kubernetes_apt_repo_url:  "http://nexus:8083/repository/apt-kubernetes/"
 kubernetes_apt_repo_pool:  "kubernetes-xenial"
 kubernetes_kubelet_extra_args:  ""
+kubernetes_pod_network:
+  cni: 'weave'
+  cidr: 172.18.0.0/16
