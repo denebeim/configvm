@@ -15,4 +15,5 @@
     - machines/common
     - machines/pre_docker
     - geerlingguy.containerd
+    - machines/kubernetes
     - geerlingguy.kubernetes
