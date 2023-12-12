@@ -1,3 +1,10 @@
+.idea
+python/share
+com_crashlytics_export_strings
+group_vars
+
+
+
 # Created by .ignore support plugin (hsz.mobi)
 
 collections/*
