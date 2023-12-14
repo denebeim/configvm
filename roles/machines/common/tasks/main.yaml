@@ -5,9 +5,26 @@
 - name: reconfigure sources.list
   replace:
     path: /etc/apt/sources.list
-    regexp: '8082'
-    replace: '8083'
+    regexp: '^deb'
+    replace: '# '
     backup: yes
+
+- name: Deepthot Repository
+  ansible.builtin.blockinfile:
+    path: /etc/apt/sources.list.d/deepthot.list
+    append_newline: true
+    prepend_newline: true
+    block: |
+      deb http://nexus:8083/repository/ubuntu jammy main restricted
+      deb http://nexus:8083/repository/ubuntu jammy-updates main restricted
+      deb http://nexus:8083/repository/ubuntu jammy universe
+      deb http://nexus:8083/repository/ubuntu jammy-updates universe
+      deb http://nexus:8083/repository/ubuntu jammy multiverse
+      deb http://nexus:8083/repository/ubuntu jammy-updates multiverse
+      deb http://nexus:8083/repository/ubuntu jammy-backports main restricted universe multiverse
+      deb http://nexus:8083/repository/ubuntu jammy-security main restricted
+      deb http://nexus:8083/repository/ubuntu jammy-security universe
+      deb http://nexus:8083/repository/ubuntu jammy-security multiverse
 
 - name: upgrade packages
   apt:
