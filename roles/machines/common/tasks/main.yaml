@@ -6,7 +6,7 @@
   replace:
     path: /etc/apt/sources.list
     regexp: '^deb'
-    replace: '# '
+    replace: '# deb'
     backup: yes
 
 - name: Deepthot Repository
