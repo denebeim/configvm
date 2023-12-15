@@ -95,3 +95,10 @@
 #    ipa_pass: "{{ipaadmin_password}}"
 #    zone_name: "{{domain}}"
 #  when: "'k8s_masters' in group_names"
+
+- ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
