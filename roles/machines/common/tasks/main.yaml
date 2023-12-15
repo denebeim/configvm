@@ -12,6 +12,7 @@
 - name: Deepthot Repository
   ansible.builtin.blockinfile:
     path: /etc/apt/sources.list.d/deepthot.list
+    create: true
     block: |
       deb http://nexus:8083/repository/ubuntu jammy main restricted
       deb http://nexus:8083/repository/ubuntu jammy-updates main restricted
