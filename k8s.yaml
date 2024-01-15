@@ -10,6 +10,21 @@
 
   vars:
     docker_packages_state: absent
+    kubernetes_version: '1.29.0'
+    kubernetes_apt_repository: 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /'
+    kubernetes_allow_pods_on_control_plane: true
+    kubernetes_pod_network:
+      # Flannel CNI.
+      # cni: 'flannel'
+      # cidr: '10.244.0.0/16'
+      #
+      # Calico CNI.
+      cni: 'calico'
+      cidr: '192.168.0.0/16'
+      #
+      # Weave CNI.
+      # cni: 'weave'
+      # cidr: '192.168.0.0/16'
 
   roles:
     - machines/common
