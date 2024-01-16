@@ -10,7 +10,7 @@
 
   vars:
     docker_packages_state: absent
-    kubernetes_version: '1.29.0'
+    kubernetes_version: 'stable'
     kubernetes_apt_repository: 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /'
     kubernetes_allow_pods_on_control_plane: true
     kubernetes_pod_network:

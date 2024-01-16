@@ -6,3 +6,4 @@ kubernetes_version_kubeadm: '1.29.0'
 kubernetes_apt_repo_url:  "http://pkgs.k8s.io/"
 kubernetes_apt_repo_pool:  "kubernetes-xenial"
 kubernetes_kubelet_extra_args:  ""
+kubernetes_kubeadm_kubelet_config_file_path: '/etc/kubernetes/kubeadm-kubelet-config.yaml'
