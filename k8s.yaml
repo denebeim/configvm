@@ -20,7 +20,7 @@
       #
       # Calico CNI.
       cni: 'calico'
-      cidr: '192.168.0.0/16'
+      cidr: '10.244.0.0/16'
       #
       # Weave CNI.
       # cni: 'weave'
