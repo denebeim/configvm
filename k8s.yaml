@@ -31,6 +31,6 @@
     - machines/pre_docker
     - geerlingguy.containerd
     - machines/kubernetes
-    - geerlingguy.kubernetes
+    - role: geerlingguy.kubernetes
       vars:
         kubernetes_version_kubeadm: '{{kubernetes_version}}'
