@@ -2,7 +2,7 @@
 # This playbook deploys the whole application stack in this site.
 
 - name: set up docker machine
-  hosts: docker
+  hosts: all
   remote_user: ansible
   become: true
   collections:
