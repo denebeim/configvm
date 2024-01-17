@@ -2,9 +2,8 @@
 docker_version:  "24.0.5"
 kubernetes_master_version:  "1.29.0"
 kubernetes_version: '1.29.0'
-kubernetes_version_kubeadm: '1.29.0'
+kubernetes_version_kubeadm: '{{ kubernetes_version }}'
 kubernetes_apt_repo_url:  "http://pkgs.k8s.io/"
 kubernetes_apt_repo_pool:  "kubernetes-xenial"
 kubernetes_kubelet_extra_args:  ""
 kubernetes_kubeadm_kubelet_config_file_path: '/etc/kubernetes/kubeadm-kubelet-config.yaml'
-kubernetes_version_kubeadm: '{{ kubernetes_version }}'
