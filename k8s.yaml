@@ -32,3 +32,5 @@
     - geerlingguy.containerd
     - machines/kubernetes
     - geerlingguy.kubernetes
+      vars:
+        kubernetes_version_kubeadm: '{{kubernetes_version}}'
