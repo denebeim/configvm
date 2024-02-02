@@ -2,7 +2,7 @@
 python/share
 com_crashlytics_export_strings
 .vault
-
+certs/*
 
 
 # Created by .ignore support plugin (hsz.mobi)
