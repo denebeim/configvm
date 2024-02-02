@@ -1,7 +1,7 @@
 ---
 docker_version:  "24.0.5"
-kubernetes_master_version:  "1.29.0"
-kubernetes_version: '1.29.0'
+kubernetes_master_version:  '1.29.1'
+kubernetes_version: '1.29.1'
 kubernetes_version_kubeadm: '{{ kubernetes_version }}'
 kubernetes_apt_repo_url:  "http://pkgs.k8s.io/"
 kubernetes_apt_repo_pool:  "kubernetes-xenial"

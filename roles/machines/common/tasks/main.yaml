@@ -1,29 +1,8 @@
 ---
 # configure a VM that has been created on esx
 
-# we changed the port on the nexus repository
-- name: reconfigure sources.list
-  replace:
-    path: /etc/apt/sources.list
-    regexp: '^deb'
-    replace: '# deb'
-    backup: yes
-
-- name: Deepthot Repository
-  ansible.builtin.blockinfile:
-    path: /etc/apt/sources.list.d/deepthot.list
-    create: true
-    block: |
-      deb http://nexus:8083/repository/ubuntu jammy main restricted
-      deb http://nexus:8083/repository/ubuntu jammy-updates main restricted
-      deb http://nexus:8083/repository/ubuntu jammy universe
-      deb http://nexus:8083/repository/ubuntu jammy-updates universe
-      deb http://nexus:8083/repository/ubuntu jammy multiverse
-      deb http://nexus:8083/repository/ubuntu jammy-updates multiverse
-      deb http://nexus:8083/repository/ubuntu jammy-backports main restricted universe multiverse
-      deb http://nexus:8083/repository/ubuntu jammy-security main restricted
-      deb http://nexus:8083/repository/ubuntu jammy-security universe
-      deb http://nexus:8083/repository/ubuntu jammy-security multiverse
+- name: reconfigure apt sources
+  include_tasks: apt_sources.yaml
 
 - name: upgrade packages
   apt:

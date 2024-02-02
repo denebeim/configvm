@@ -1,6 +1,6 @@
 ---
 roles:
-  - geerlingguy.docker
-  - geerlingguy.kubernetes
-  - nginxinc.nginx_config
-  - geerlingguy.containerd
+  - name: geerlingguy.docker
+  - name: geerlingguy.kubernetes
+  - name: nginxinc.nginx_config
+  - name: geerlingguy.containerd

@@ -1,1 +1,5 @@
-# include tasks/weave
+---
+- name: install k8s apt key
+  ansible.builtin.get_url:
+    url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+    dest: "/etc/apt/trusted.gpg.d/k8s.asc"
