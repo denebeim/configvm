@@ -88,3 +88,7 @@ Tomorrow:
 
 NOTE: yeah, I definately should do a dry run with the USBSSD I have.
 
+Well, I fell into the youtube black hole... I'm trying to rememver who I saw with the command that allows you to take standard images and add packages to them.  (like emacs and ipa-client)
+Still having issues.  I can't seem to find the application I ran across yesterday to add deb packages to an img file...  waste of time.
+
+
