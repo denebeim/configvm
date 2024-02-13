@@ -91,4 +91,8 @@ NOTE: yeah, I definately should do a dry run with the USBSSD I have.
 Well, I fell into the youtube black hole... I'm trying to rememver who I saw with the command that allows you to take standard images and add packages to them.  (like emacs and ipa-client)
 Still having issues.  I can't seem to find the application I ran across yesterday to add deb packages to an img file...  waste of time.
 
+I've been unable to transfer IPA to proxmox, it just doesn't work.  The test machine worked fine, I'm suspecting it's the centos instead of ubuntu.  I'm ls
+
+2/15/2 today I got services over.  IPA is a problem, I don't know if it's centos related or joy related.  Moving services involved editing /etc/netplan/01-network-manager-all.yaml which has the fixed ID and ethernet device in it.  I'm hoping this is because it has a fixed IP.  Which reminds me *always* use DHCP to assign addresses.  Use a MAC if you want static assignments.
+
 
