@@ -1,7 +1,7 @@
 collections:
-- name: freeipa-ansible_freeipa-1.12.0.tar.gz
+- name: freeipa.ansible_freeipa
   version: 1.12.0
-- name: ansible-posix-1.5.4.tar.gz
+- name: ansible.posix
   version: 1.5.4
-- name: community-general-8.2.0.tar.gz
+- name: community.general
   version: 8.2.0
