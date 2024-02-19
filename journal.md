@@ -95,4 +95,56 @@ I've been unable to transfer IPA to proxmox, it just doesn't work.  The test mac
 
 2/15/2 today I got services over.  IPA is a problem, I don't know if it's centos related or joy related.  Moving services involved editing /etc/netplan/01-network-manager-all.yaml which has the fixed ID and ethernet device in it.  I'm hoping this is because it has a fixed IP.  Which reminds me *always* use DHCP to assign addresses.  Use a MAC if you want static assignments.
 
+2/18/24 I've been remiss of keeping this stuff updated, what I should do is write everyting down as I do it and then edit it down.
+anyway...  
 
+### transferring a debian VM from esxi to pve
+1. ssh into the pve machine
+1. If you haven't downloaded ovftool do so now, it's easy to find with google, who knows if broadcom will keep it working or not.
+1. run ./ovftool vi://<ESXi server>/<machine name>
+    * On deepthot the ESXi is 192.168.42.3.  1=router 2=dns/dhcp 3=hypervisor 4=DNS/certs/LDAP/kerberos aka AD or IPA
+1. qm importovf ASSET# <path to ovf file> <store to create machine on>  (right now that would be local-lvm and h2gt2g-hosts)
+1. add a nic to the machine
+1. boot it up, get root and: rm cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
+1. reboot
+1. I'm sparked
+1. if it's joined to the network go into ipa and change the a record to match what the machine is now
+
+Now, this is on 20.04.  I'm hoping 22.04 didn't have the issue where the cloud config file needed removing.  I know this didn't happen while I was running services.
+
+### transferring a centos 7 vm from esxi to pve
+Not nearly as clean, when I tried the ovftool the imported machine just sucked.  Fortunately
+
+1. get a copy of rescuzilla [download](https://github.com/rescuezilla/rescuezilla/releases/download/2.4.2/rescuezilla-2.4.2-64bit.jammy.iso)
+1. boot the machine you want to transfer with it
+1. clone the drive actually the vm
+1. boot the machine you want to move it to with rescuezilla
+1. install the clone
+1. reboot and... um... I'll have to see
+
+The A record may be wrong sometimes when the machine comes up.  Just put the new ip into the a record in ipa.
+
+## awx
+Awx almost worked when I transferred it.  The main problem was it had a different ethernet address which didn't work with the dns stuff used by IPA.  So, I changed DNS entry by hand and now it's cool.
+
+Testing to make sure it works:
+1. --spin up an image on proxmox--
+2. --edit the hosts.ini file to add it--
+1. --try running the playbook locally--
+1. repeat the above except using awx
+
+wow, that took awhile, but the common ansible runner once I got it running worked flawlessly
+
+
+
+
+ToDo: here are the things I want to do.  I'm putting them here to keep from getting distracted from them.
+1. zfs
+1. cloudflare
+1. k8s
+1. rancher
+1. plex
+1. mastodon
+1. other fediverse things
+1. vscode
+1. zsh

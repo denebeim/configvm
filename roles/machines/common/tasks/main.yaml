@@ -1,8 +1,8 @@
 ---
 # configure a VM that has been created on esx
 
-- name: reconfigure apt sources
-  include_tasks: apt_sources.yaml
+#- name: reconfigure apt sources
+#  include_tasks: apt_sources.yaml
 
 - name: upgrade packages
   apt:
