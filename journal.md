@@ -135,8 +135,11 @@ Testing to make sure it works:
 
 wow, that took awhile, but the common ansible runner once I got it running worked flawlessly
 
+It's taking me awhile to get awx to run a new inventory.  I don't want to do the old one because of so many machines, I just want one that's clean.  Unfortunately I don't think I know or rather remember how to make a new inventory and use it on an arbitrary system running an arbitrary job.  awx. is, as always confusing as fuck to me.
 
+I've got the proxmox backup server (pbs) installed, it was pretty straight forward since it's almost like proxmox.  The only thing that confused me is that 'backing store' means where the place you want to do your backups is mounted.  Right now that's h2gt2g which is kinda useless.  but I've mounted in the fstab 192.168.42.7:/volume1/pbs to /mnt/h2gt2g  
 
+So for today I'm going to migrate the 
 
 ToDo: here are the things I want to do.  I'm putting them here to keep from getting distracted from them.
 1. zfs
@@ -146,5 +149,13 @@ ToDo: here are the things I want to do.  I'm putting them here to keep from gett
 1. plex
 1. mastodon
 1. other fediverse things
-1. vscode
+1. vscode clean this up
 1. zsh
+1. awx getting proxmox inventory
+1. pxe server (look at maas and the other thing tt mentioned) (tt is technotim on youtube for future joy)
+1. gitlab
+1. figure out why some vms are not getting dns name correctly
+1. vlans
+1. move from deepthot.aa to local.deepthot.org or maybe l 'cause it's getting pretty long'
+
+
