@@ -139,7 +139,38 @@ It's taking me awhile to get awx to run a new inventory.  I don't want to do the
 
 I've got the proxmox backup server (pbs) installed, it was pretty straight forward since it's almost like proxmox.  The only thing that confused me is that 'backing store' means where the place you want to do your backups is mounted.  Right now that's h2gt2g which is kinda useless.  but I've mounted in the fstab 192.168.42.7:/volume1/pbs to /mnt/h2gt2g  
 
-So for today I'm going to migrate the 
+So for today I'm going to migrate the blueray machine, and I think that's all.  Then I'm going to install proxmox to the ssd thumbdrive I have and try to boot it.  I'm not quite ready to overwrite esxi, scary, you know?
+
+Oh, I also got backups set up for the vms.  we'll see how other vms handle it when they've got more on them than services and ipa.
+
+I fell down the vlan rabbit hole.  This is a big project and I need to stop dwelling on it....
+
+So, 'blueray' the machine that has the blueray and all of the usb backup drives on it has been difficult.  To the best of my knowledge qm doesn't like btrfs disks.  That machine was made when I still thought btrfs was a good idea.  (It is, but it isn't tolerant of losing power.  I've had several die, that was how I lost my first k8s nodes and all the cool stuff I had set up in 2019)  Anyway, to import it I did this:
+
+1. create a ext4 disk with a boot partition and an lvm partition with one drive full
+1. mount it on /mnt and the boot on /mnt/boot
+1. rsync -xHAXavS / /mnt
+1. mount -obind /proc /mnt/proc
+1. repeat the previous for /dev, /sys. 
+1. run lvmetad
+1. chroot /mnt
+1. I think grub install /dev/sdc or whatever the drive is.  I had to futz around a bit so it might not be that, it might be apt install --reinstall 'the current kernel package' or dpkg-reconfigure grub-pc.  One of those got it done.
+1. use rescuezilla to make an image of the new drive
+1. make a drive on proxmox of the same size
+1. boot the proxmox machine with rescuezilla
+1. restore the image above to the new drive
+
+Note to self: one of the main things that was keeping me from working yesterda is the machine blueray had 8 cores.  It's only powered up when it's doing things like 
+
+That's where I am now.  What I'm going to do next is to snapshot the machine.  Boot it and see if it's working.  It won't work completely because it's now running on the hp where the usb drives are not.  I may have to boot it in rescue mode and edit /etc/fstab to remove the usb drives.  Anyway, see if it boots.  When it does, install qemu-guest-agent, take another snapshot.  Then upgrade the ubuntu to 22.04, might have to do 20.04 first.  It's on 18.04 which is unsupported nowadays.
+
+Oy vey... I'm getting a lot of grief from cloud-init, I think I better learn it.  Anyway, blueray is doneish.  It will need to be reconfigured after it is placed on the supermicro.
+
+## Installing proxmox on supermicro
+
+The next step is to install proxmox on the supermicro.  Just because I'm paranoid I'm going to configure proxmox on sandisk thumb ssd.  Create some machines, move them back and forth etc.  When the final move happens this should be a copy rather than a move.  If everything works the next thing is to install proxmox on the supermicro for real.
+
+This will involve creating a cluster on proxmox, joining the supermicro to it, play with it, unjoin it, then do the install and the final join.
 
 ToDo: here are the things I want to do.  I'm putting them here to keep from getting distracted from them.
 1. zfs
@@ -157,5 +188,6 @@ ToDo: here are the things I want to do.  I'm putting them here to keep from gett
 1. figure out why some vms are not getting dns name correctly
 1. vlans
 1. move from deepthot.aa to local.deepthot.org or maybe l 'cause it's getting pretty long'
+1. move services to a stand alone raspberry pi
 
 
