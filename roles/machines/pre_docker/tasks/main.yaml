@@ -102,3 +102,8 @@
     sysctl_set: yes
     state: present
     reload: yes
+
+- ansible.builtin.group:
+    name: docker
+    system: true
+    state: present

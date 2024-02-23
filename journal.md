@@ -172,6 +172,13 @@ The next step is to install proxmox on the supermicro.  Just because I'm paranoi
 
 This will involve creating a cluster on proxmox, joining the supermicro to it, play with it, unjoin it, then do the install and the final join.
 
+Well...  As soon as proxmox started to boot it said there was a firmware bug in the processor and it needed a firmware patch.  Then it stopped booting, and now it won't boot at all anymore.  I'm glad I made sure everything was off of it.  So....  total failure at the moment, I'll try to get the machine back.
+
+## Investigating pxe boot provisioning machines all the way to configuration.
+
+Since I'm on the old game machine I can't really do any k8s or plex at the moment.  Instead I'm going to play with images and investigate pixe booting with the machine catching it and configuring it the rest of the way with ansible.
+
+
 ToDo: here are the things I want to do.  I'm putting them here to keep from getting distracted from them.
 1. zfs
 1. cloudflare

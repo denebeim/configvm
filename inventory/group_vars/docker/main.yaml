@@ -1,6 +1,6 @@
 ---
-docker_repo_url: "http://nexus:8083/repository/apt-docker/linux"
-docker_users: [denebeim]
+docker_repo_url: "https://download.docker.com/linux"
+# docker_users: [denebeim]
 docker_daemon_options: {
   "exec-opts": ["native.cgroupdriver=systemd"],
   "log-driver": "json-file",

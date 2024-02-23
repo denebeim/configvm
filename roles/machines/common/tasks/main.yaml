@@ -20,6 +20,7 @@
       - autofs
       - nfs-kernel-server
       - direnv
+      - qemu-guest-agent
 
 - name: edit nsswitch to allow sss to access automount
   lineinfile:
