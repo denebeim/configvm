@@ -98,6 +98,7 @@ I've been unable to transfer IPA to proxmox, it just doesn't work.  The test mac
 2/18/24 I've been remiss of keeping this stuff updated, what I should do is write everyting down as I do it and then edit it down.
 anyway...  
 
+
 ### transferring a debian VM from esxi to pve
 1. ssh into the pve machine
 1. If you haven't downloaded ovftool do so now, it's easy to find with google, who knows if broadcom will keep it working or not.
@@ -120,7 +121,7 @@ Not nearly as clean, when I tried the ovftool the imported machine just sucked. 
 1. clone the drive actually the vm
 1. boot the machine you want to move it to with rescuezilla
 1. install the clone
-1. reboot and... um... I'll have to see
+1. reboot and it works
 
 The A record may be wrong sometimes when the machine comes up.  Just put the new ip into the a record in ipa.
 
@@ -133,9 +134,9 @@ Testing to make sure it works:
 1. --try running the playbook locally--
 1. repeat the above except using awx
 
-wow, that took awhile, but the common ansible runner once I got it running worked flawlessly
+wow, that took awhile, but the local ansible runner once I got it running worked flawlessly.  AWX is more problematical.
 
-It's taking me awhile to get awx to run a new inventory.  I don't want to do the old one because of so many machines, I just want one that's clean.  Unfortunately I don't think I know or rather remember how to make a new inventory and use it on an arbitrary system running an arbitrary job.  awx. is, as always confusing as fuck to me.
+It's taking me awhile to get awx to run a new inventory.  I don't want to do the old one because of so many machines, I just want one that's clean.  Unfortunately I don't think I know or rather remember how to make a new inventory and use it on an arbitrary system running an arbitrary job.  awx. is, as always confusing as fuck to me.  Actually, not too bad if you do it by hand.  AWX...  probably more trouble than it's worth for something I'm only doing once.
 
 I've got the proxmox backup server (pbs) installed, it was pretty straight forward since it's almost like proxmox.  The only thing that confused me is that 'backing store' means where the place you want to do your backups is mounted.  Right now that's h2gt2g which is kinda useless.  but I've mounted in the fstab 192.168.42.7:/volume1/pbs to /mnt/h2gt2g  
 
@@ -160,7 +161,7 @@ So, 'blueray' the machine that has the blueray and all of the usb backup drives 
 1. boot the proxmox machine with rescuezilla
 1. restore the image above to the new drive
 
-Note to self: one of the main things that was keeping me from working yesterda is the machine blueray had 8 cores.  It's only powered up when it's doing things like 
+Note to self: one of the main things that was keeping me from working yesterday is the machine blueray had 8 cores.  It's only powered up when it's doing things like ripping dvds or backing up onto the external drives.
 
 That's where I am now.  What I'm going to do next is to snapshot the machine.  Boot it and see if it's working.  It won't work completely because it's now running on the hp where the usb drives are not.  I may have to boot it in rescue mode and edit /etc/fstab to remove the usb drives.  Anyway, see if it boots.  When it does, install qemu-guest-agent, take another snapshot.  Then upgrade the ubuntu to 22.04, might have to do 20.04 first.  It's on 18.04 which is unsupported nowadays.
 
@@ -178,6 +179,53 @@ Well...  As soon as proxmox started to boot it said there was a firmware bug in 
 
 Since I'm on the old game machine I can't really do any k8s or plex at the moment.  Instead I'm going to play with images and investigate pixe booting with the machine catching it and configuring it the rest of the way with ansible.
 
+What I did was install netboot.xyz.  It's a wonderful little tftp server, you boot it and then it has a huge list of bootable CDs.  Install disks for every linux under the sun, rescue disks, everything.  This would be fantastic when I'm trying to recover a machine where I have to track down the rescue disk and burn it, then boot the machine.  Fah...  Now any machine on the network I just pxeboot it and all the media you want is there.
+
+But I've not got it working to configuration yet.  What I need at this point is for awx to be able to see the newly booted machine.  I've got this great script that makes groups for everything.  I've been unable to convince awx to use it as a dynamic inventory, but it works great on ansible-playbook from the cli.  Still investigating.
+
+## New machine arrived.
+It's wonderfuly, kinda short on drive space, but that just means it's the same size as the san.  I'm trying to figure out how to partition it.  It does have two SSDs, but they're not the same size so they can't be raided.
+
+The old machine is still dead, although I haven't tried it in awhile.  I'm planning on opening it up and figuring how how to reset it, removing the cmos battery for a long while might do the trick.
+
+I spent many hours trying to get proxmox on it.  I finally gave up on uefi and did a bios boot on it.  That worked, from the thumb drive.  I'm not sure if the PXI boot would work now that I understand.
+
+Anyway, proxmox is up and running.  I've named it eddie (the shipboard computer).
+
+## Migrating machines to eddie
+Oh the hp is called pve, which is the default.  I'm hoping heartogold will come back.  But henceforward I'll call the machines by their names.
+
+Currently h2gt2g is up and running, but the vms are all on pve's local disk.  So, the next step is
+
+1. [x] Migrate the hard drives from pve to h2gt2g
+1. Migrate the machines to eddie
+1. Migrate the hard drives to eddie's boot disk
+
+## Pihole
+I installed pihole on a really too big for it VM.  I should probably use debian for it.  Anyway, the only issue was it wants to have
+port 53, and systemd_resolver of course has it up.  When you take it down obviously resolv.conf goes away.
+
+So, delete resolve.conf and insert the following:
+
+'''
+nameserver 127.0.0.1
+options edns0 trust-ad
+search deepthot.aa deepthot
+'''
+
+Came up cleanly, the best place to get blacklists is:  https://firebog.net it has a ton of lists of varying qualities.
+
+## awx 
+
+1. get new awx up
+
+https://www.apalrd.net/posts/2023/pve_cloud/ has a great little script that installs images for some of the more popular operating systems and then makes them into a template.  
+
+I'm having a ton of grief installing rocky 9.  It took for friggin ever on the big machine.  I think it's *really* friggen slow.  Not entirely sure why.
+
+I'm using https://ansible.readthedocs.io/projects/awx-operator/en/latest/installation/kind-install.html for the awx install.  I may end up just saying eff it and install this:  https://youtu.be/UoOcLXfa8EU?si=SdiHY-Ir2ZUBzwFZ  then deploy awx with https://ansible.readthedocs.io/projects/awx-operator/en/latest/installation/helm-install-on-existing-cluster.html
+
+
 
 ToDo: here are the things I want to do.  I'm putting them here to keep from getting distracted from them.
 1. zfs
@@ -192,9 +240,7 @@ ToDo: here are the things I want to do.  I'm putting them here to keep from gett
 1. awx getting proxmox inventory
 1. pxe server (look at maas and the other thing tt mentioned) (tt is technotim on youtube for future joy)
 1. gitlab
-1. figure out why some vms are not getting dns name correctly
+1. figure out why some vms are not getting dns name correctly.  Hypothosis trick is not to release the leases on reboot.
 1. vlans
 1. move from deepthot.aa to local.deepthot.org or maybe l 'cause it's getting pretty long'
 1. move services to a stand alone raspberry pi
-
-
