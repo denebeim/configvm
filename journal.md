@@ -225,6 +225,9 @@ I'm having a ton of grief installing rocky 9.  It took for friggin ever on the b
 
 I'm using https://ansible.readthedocs.io/projects/awx-operator/en/latest/installation/kind-install.html for the awx install.  I may end up just saying eff it and install this:  https://youtu.be/UoOcLXfa8EU?si=SdiHY-Ir2ZUBzwFZ  then deploy awx with https://ansible.readthedocs.io/projects/awx-operator/en/latest/installation/helm-install-on-existing-cluster.html
 
+Days into it here, but https://techviewleo.com/install-kubernetes-cluster-using-k3s-on-debian/ has a really concise description on how to install k3s
+
+I think I've got a good one for installing awx as well, but I believe I must have metallb installed.  (fun, I loved it last time I had k8s up)
 
 
 ToDo: here are the things I want to do.  I'm putting them here to keep from getting distracted from them.
