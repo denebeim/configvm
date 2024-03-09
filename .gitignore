@@ -3,7 +3,7 @@ python/share
 com_crashlytics_export_strings
 .vault
 certs/*
-
+.envrc
 
 # Created by .ignore support plugin (hsz.mobi)
 
