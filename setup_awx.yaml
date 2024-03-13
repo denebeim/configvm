@@ -7,6 +7,6 @@
     - community.general
   become: true
   remote_user: ansible
-  vars:
 
-  
+  roles:
+    - install_awx
