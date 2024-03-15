@@ -1,14 +1,13 @@
 ---
 
-- hosts: "eddie"
+- hosts: "pve"
   remote_user: root
   gather_facts: yes
 
   vars:
     clone: ubuntu-cloud
-    api_host: eddie
-    vmname: awx-host
-    newid: 300
+    api_host: pve
+    vmname: testable
     memory: 8192
     cores: 4
     size: 20G
@@ -19,7 +18,7 @@
   roles:
     - proxmox/create_vm
 
-- hosts: "awx-host"
+- hosts: "testable"
   remote_user: ansible
   become: true
   gather_facts: yes
@@ -28,5 +27,3 @@
     - machines/ipa
     - techno_tim.k3s_ansible.download
     - techno_tim.k3s_ansible.k3s_server
-    - deploy_metallb
-
